@@ -1,31 +1,38 @@
 package pages;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
+import org.openqa.selenium.WebElement;
+
+import java.io.IOException;
 
 public class LoginPage extends BasePage {
-    //By login_Field = By.xpath("//android.widget.EditText[@text='введите логин']");
-    By login_Field = By.name("введите логин");
-    By label = By.name("MedGreat Доктор");
-    By password_Field = By.xpath("//android.view.ViewGroup[@index='3']/android.widget.EditText");
-    By login_Button = By.name("ВОЙТИ");
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
+    private By loginFieldBy = By.name("введите логин");
+    private By docAppLabelBy = By.name("MedGreat Доктор");
+    private By passwordFieldBy = By.xpath("//android.view.ViewGroup[@index='3']/android.widget.EditText");
+    //private By passwordFieldBy = By.xpath("//text[@value='введите пароль']");
+    private By loginButtonBy = By.name("ВОЙТИ");
+    private By snackBarBy = By.id("snackbar_text");
 
-    public LoginPage invalidLogin() throws InterruptedException {
-        waitForVisibilityOf(login_Field);
-        driver.findElement(login_Field).click();
-        driver.findElement(login_Field).clear();
-        driver.findElement(login_Field).sendKeys("someone@test.com");
-        driver.findElement(label).click();
-        driver.findElement(password_Field).click();
-        driver.findElement(password_Field).sendKeys("test123");
-        driver.findElement(label).click();
-        driver.findElement(login_Button).click();
-        Assert.assertTrue(driver.findElement(By.id("snackbar_text")).getText().equalsIgnoreCase("Почта или пароль неверны"));
-        return new LoginPage(driver);
+    private WebElement getElement(By element){
+       return driver.findElement(element);
+    }
+
+    public void login(String illegalLogin, String illegalPassword) throws IOException {
+        waitForVisibilityOf(loginFieldBy);
+        getElement(loginFieldBy).click();
+        getElement(loginFieldBy).clear();
+        getElement(loginFieldBy).sendKeys(illegalLogin);
+        getElement(docAppLabelBy).click();
+        getElement(passwordFieldBy).click();
+        getElement(passwordFieldBy).sendKeys(illegalPassword);
+        getElement(docAppLabelBy).click();
+        getElement(loginButtonBy).click();
+    }
+    public boolean incorrectLoginWorks(){
+        return (getElement(snackBarBy).getText()).equalsIgnoreCase("Почта или пароль неверны");
     }
 }
