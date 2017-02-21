@@ -17,7 +17,7 @@ public class AndroidSetup {
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("platformVersion", "6.0");
         capabilities.setCapability("deviceName", "Nexus");
-        String absolutePath = "D:\\work\\IntellijIDEAProjects\\DocTest\\apps\\Doc_Test-2.0.7-(41).apk";
+        String absolutePath = "D:\\work\\IntellijIDEAProjects\\DocTest\\apps\\MedGreat Doctors_v2.0.5.apk";
         capabilities.setCapability("app", absolutePath);
         capabilities.setCapability("appPackage", "com.greitkonsalt.medgreat");
         capabilities.setCapability("appActivity", "md52a2818ca98838453339ce3d8b836c7ca.MainActivity");
