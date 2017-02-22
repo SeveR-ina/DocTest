@@ -1,6 +1,7 @@
 package Tests;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import pages.LoginPage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,11 +10,22 @@ import java.util.Properties;
 
 
 class AndroidSetup {
-    AndroidDriver driver;
+    private AndroidDriver driver;
     Properties testProperties = new Properties();
     private String APPIUM_VERSION, PLATFORM_NAME, PLATFORM_VERSION, DEVICE_NAME, ABSOLUTE_PATH_TO_DOC_APP, DOC_APP_PACKAGE, DOC_APP_ACTIVITY, ANDROID_DRIVER_URL;
+    LoginPage loginPage;
 
-    void loadPropertiesFromFile() throws IOException{
+    public void setUp() throws Exception {
+        prepareAndroidForAppium();
+        loadPropertiesFromFile();
+        loginPage = new LoginPage(driver);
+    }
+
+    public void tearDown() throws Exception {
+        driver.quit();
+    }
+
+    private void loadPropertiesFromFile() throws IOException{
         String propertiesPath = "D:\\work\\IntellijIDEAProjects\\DocTest\\src\\test\\java\\resources\\test.properties";
         FileInputStream testPropertiesFile = new FileInputStream(propertiesPath);
         testProperties.load(testPropertiesFile);
@@ -31,7 +43,7 @@ class AndroidSetup {
         ANDROID_DRIVER_URL = testProperties.getProperty("androidDriverUrl");
     }
 
-    void prepareAndroidForAppium() throws IOException {
+    private void prepareAndroidForAppium() throws IOException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         getBaseProperties();
         capabilities.setCapability("appium-version", APPIUM_VERSION);

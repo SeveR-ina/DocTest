@@ -22,8 +22,8 @@ class BasePage {
         return driver.findElement(element);
     }
 
-    void waitForVisibilityOf(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+    void waitForVisibilityOf(By locator, long timeOutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 }
