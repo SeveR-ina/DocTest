@@ -1,7 +1,6 @@
 package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 
@@ -16,10 +15,7 @@ public class LoginPage extends BasePage {
     //private By passwordFieldBy = By.xpath("//text[@value='введите пароль']");
     private By loginButtonBy = By.name("ВОЙТИ");
     private By snackBarBy = By.id("snackbar_text");
-
-    private WebElement getElement(By element){
-       return driver.findElement(element);
-    }
+    private By myAnswersLabelBy = By.name("Мои ответы");
 
     public void login(String illegalLogin, String illegalPassword) throws IOException {
         waitForVisibilityOf(loginFieldBy);
@@ -34,5 +30,10 @@ public class LoginPage extends BasePage {
     }
     public boolean incorrectLoginWorks(){
         return (getElement(snackBarBy).getText()).equalsIgnoreCase("Почта или пароль неверны");
+    }
+
+    public boolean correctLoginWorks(){
+        waitForVisibilityOf(myAnswersLabelBy);
+        return getElement(myAnswersLabelBy).isDisplayed();
     }
 }

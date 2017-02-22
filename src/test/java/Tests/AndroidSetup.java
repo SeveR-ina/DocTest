@@ -1,4 +1,4 @@
-package scenarios;
+package Tests;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -39,8 +39,8 @@ class AndroidSetup {
         capabilities.setCapability("platformVersion", PLATFORM_VERSION);
         capabilities.setCapability("deviceName", DEVICE_NAME);
         capabilities.setCapability("app", ABSOLUTE_PATH_TO_DOC_APP);
-        capabilities.setCapability("docAppPackage", DOC_APP_PACKAGE);
-        capabilities.setCapability("docAppActivity", DOC_APP_ACTIVITY);
+        capabilities.setCapability("appPackage", DOC_APP_PACKAGE);
+        capabilities.setCapability("appActivity", DOC_APP_ACTIVITY);
         driver = new AndroidDriver(new URL(ANDROID_DRIVER_URL), capabilities);
     }
 }
