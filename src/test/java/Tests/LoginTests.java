@@ -2,6 +2,7 @@ package Tests;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -9,9 +10,10 @@ import java.io.IOException;
 public class LoginTests extends AndroidSetup {
     private String TEXT_OF_CORRECT_LOGIN, TEXT_OF_CORRECT_PASS, WARNING_EMPTY_FIELDS;
 
+    @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
-    public void prepareTest() throws Exception {
-        this.setUp();
+    public void prepareTest(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
+        this.setUp(platformName, platformVersion, appiumServerURL, deviceName, UDID);
         TEXT_OF_CORRECT_LOGIN = testProperties.getProperty("correctLogin");
         TEXT_OF_CORRECT_PASS = testProperties.getProperty("correctPass");
         WARNING_EMPTY_FIELDS = testProperties.getProperty("snackBarEmptyFields");

@@ -12,11 +12,11 @@ import java.util.Properties;
 class AndroidSetup {
     private AndroidDriver driver;
     Properties testProperties = new Properties();
-    private String APPIUM_VERSION, PLATFORM_NAME, PLATFORM_VERSION, DEVICE_NAME, ABSOLUTE_PATH_TO_DOC_APP, DOC_APP_PACKAGE, DOC_APP_ACTIVITY, ANDROID_DRIVER_URL;
+    private String ABSOLUTE_PATH_TO_DOC_APP, DOC_APP_PACKAGE, DOC_APP_ACTIVITY;
     LoginPage loginPage;
 
-    public void setUp() throws Exception {
-        prepareAndroidForAppium();
+    public void setUp(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
+        prepareAndroidForAppium(platformName, platformVersion, appiumServerURL, deviceName, UDID);
         loadPropertiesFromFile();
         loginPage = new LoginPage(driver);
     }
@@ -33,27 +33,21 @@ class AndroidSetup {
 
     private void getBaseProperties() throws IOException {
         loadPropertiesFromFile();
-        APPIUM_VERSION = testProperties.getProperty("appium-version");
-        PLATFORM_NAME = testProperties.getProperty("platformName");
-        PLATFORM_VERSION = testProperties.getProperty("platformVersion");
-        DEVICE_NAME = testProperties.getProperty("deviceName");
         ABSOLUTE_PATH_TO_DOC_APP = testProperties.getProperty("absolutePathToDocApp");
         DOC_APP_PACKAGE = testProperties.getProperty("docAppPackage");
         DOC_APP_ACTIVITY = testProperties.getProperty("docAppActivity");
-        ANDROID_DRIVER_URL = testProperties.getProperty("androidDriverUrl");
     }
 
-    private void prepareAndroidForAppium() throws IOException {
+    private void prepareAndroidForAppium(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws IOException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         getBaseProperties();
-        capabilities.setCapability("appium-version", APPIUM_VERSION);
-        capabilities.setCapability("platformName", PLATFORM_NAME);
-        capabilities.setCapability("platformVersion", PLATFORM_VERSION);
-        capabilities.setCapability("deviceName", DEVICE_NAME);
+        capabilities.setCapability("platformName", platformName);
+        capabilities.setCapability("platformVersion", platformVersion);
+        capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("udid", UDID);
         capabilities.setCapability("app", ABSOLUTE_PATH_TO_DOC_APP);
         capabilities.setCapability("appPackage", DOC_APP_PACKAGE);
         capabilities.setCapability("appActivity", DOC_APP_ACTIVITY);
-        driver = new AndroidDriver(new URL(ANDROID_DRIVER_URL), capabilities);
-        //driver = new RemoteWebDriver(new Uri("http://123.20.38.134:4723/wd/hub"), capabilities);
+        driver = new AndroidDriver(new URL("http://"+appiumServerURL), capabilities);
     }
 }

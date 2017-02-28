@@ -58,7 +58,6 @@ public class LoginPage extends BasePage {
     }
 
     public void pressLoginButton(){
-        //waitForVisibilityOf(loginButtonBy, 10);
         WebElement button = getElement(loginButtonBy);
         button.click();
     }
@@ -69,7 +68,6 @@ public class LoginPage extends BasePage {
     }
 
     private void sendKeys(By elementBy, String keys){
-        //waitForVisibilityOf(elementBy, 10);
         clearField(elementBy);
         getElement(elementBy).sendKeys(keys);
     }
