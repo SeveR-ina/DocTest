@@ -54,5 +54,6 @@ class AndroidSetup {
         capabilities.setCapability("appPackage", DOC_APP_PACKAGE);
         capabilities.setCapability("appActivity", DOC_APP_ACTIVITY);
         driver = new AndroidDriver(new URL(ANDROID_DRIVER_URL), capabilities);
+        //driver = new RemoteWebDriver(new Uri("http://123.20.38.134:4723/wd/hub"), capabilities);
     }
 }

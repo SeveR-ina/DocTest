@@ -39,9 +39,15 @@ public class LoginPage extends BasePage {
     }
 
     public void typeToFieldSomeText(String field, String keys){
-        if (field.equalsIgnoreCase("login")) sendKeys(loginFieldBy, keys);
-        else if (field.equalsIgnoreCase("password")) sendKeys(passwordFieldBy, keys);
-        else System.out.println("Введите правильное название поля: либо login либо password");
+        if (field.equalsIgnoreCase("login")) {
+            sendKeys(loginFieldBy, keys);
+        }
+        else if (field.equalsIgnoreCase("password")) {
+            sendKeys(passwordFieldBy, keys);
+        }
+        else {
+            System.out.println("Введите правильное название поля: либо login либо password");
+        }
 
     }
 

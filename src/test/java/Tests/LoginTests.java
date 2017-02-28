@@ -42,14 +42,19 @@ public class LoginTests extends AndroidSetup {
     }
 
     @Test
-    public void emptyLoginTest() throws IOException {
+    public void emptyLoginFieldTest() throws IOException {
         System.out.println("*** check login... ***");
-        loginPage.typeToFieldSomeText("password", TEXT_OF_CORRECT_PASS);
-        loginPage.hideKeyBoard();
-        loginPage.pressLoginButton();
+        typeToFieldSomeText("password", TEXT_OF_CORRECT_PASS);
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
+        System.out.println("*** emptyLoginFieldTest DONE! ***");
+    }
 
-        System.out.println("*** emptyLoginTest DONE! ***");
+    @Test
+    public void emptyPasswordFieldTest() throws IOException {
+        System.out.println("*** check password... ***");
+        typeToFieldSomeText("login", TEXT_OF_CORRECT_LOGIN);
+        Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
+        System.out.println("*** emptyPasswordFieldTest DONE! ***");
     }
 
     @Test
@@ -57,27 +62,18 @@ public class LoginTests extends AndroidSetup {
 
         System.out.println("*** emptyFieldsTest is started! ***");
         System.out.println("*** check all fields... ***");
+        // all fields are empty. click on the login button:
         loginPage.pressLoginButton();
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
 
         System.out.println("*** emptyFieldsTest DONE! ***");
     }
 
-    @Test
-    public void emptyPassTest() throws IOException {
-
-        System.out.println("*** check password... ***");
-        loginPage.typeToFieldSomeText("login", TEXT_OF_CORRECT_LOGIN);
+    private void typeToFieldSomeText(String field, String keys){
+        loginPage.typeToFieldSomeText(field, keys);
         loginPage.hideKeyBoard();
         loginPage.pressLoginButton();
-        Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
-
-        System.out.println("*** emptyPassTest DONE! ***");
     }
-
-
-
-
 
 }
 
