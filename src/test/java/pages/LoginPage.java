@@ -1,75 +1,70 @@
 package pages;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import java.io.IOException;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage {
 
-    public LoginPage(WebDriver driver) {
+    //@WithTimeout(time = 20, unit = TimeUnit.SECONDS)
+    @FindBy(id = "EmailEntry")
+    private WebElement loginField;
+
+    @AndroidFindBy(id = "PasswordEntry")
+    private WebElement passwordField;
+
+    @AndroidFindBy(id = "LoginButton")
+    private WebElement loginButton;
+
+    @AndroidFindBy(id = "snackbar_text")
+    private WebElement snackBar;
+
+    private By loginFieldBy = By.id("EmailEntry");
+    private By snackBarBy = By.id("snackbar_text");
+
+    public LoginPage(AppiumDriver driver) {
         super(driver);
     }
-    private By loginFieldBy = By.name("введите логин");
-    private By docAppLabelBy = By.name("MedGreat Доктор");
-    private By passwordFieldBy = By.xpath("//android.view.ViewGroup[@index='3']/android.widget.EditText");
-    private By loginButtonBy = By.name("ВОЙТИ");
-    private By snackBarBy = By.id("snackbar_text");
-    private By myAnswersLabelBy = By.name("Мои ответы");
 
-    public void login(String loginText, String passwordText) throws IOException {
-        waitForVisibilityOf(loginFieldBy, 20);
-        clearField(loginFieldBy);
-        typeToFieldSomeText("login", loginText);
-        hideKeyBoard();
-        clearField(passwordFieldBy);
-        typeToFieldSomeText("password", passwordText);
-        hideKeyBoard();
-        pressLoginButton();
-    }
-
-    public boolean warningTextEquals(String snackBarText){
+    public boolean warningTextEquals(String snackBarText) {
         waitForVisibilityOf(snackBarBy, 10);
-        return (getElement(snackBarBy).getText()).equalsIgnoreCase(snackBarText);
+        return snackBar.getText().equalsIgnoreCase(snackBarText);
     }
 
-    public boolean correctLoginWorks(){
-        waitForVisibilityOf(myAnswersLabelBy, 20);
-        return getElement(myAnswersLabelBy).isDisplayed();
-    }
-
-    public void typeToFieldSomeText(String field, String keys){
+    public void clearFieldAndTypeText(String field, String keys) {
         if (field.equalsIgnoreCase("login")) {
-            sendKeys(loginFieldBy, keys);
+            clearElementByAndSendKeys(loginField, keys);
+        } else if (field.equalsIgnoreCase("password")) {
+            clearElementByAndSendKeys(passwordField, keys);
+        } else {
+            System.out.println("Введите правильное название поля: либо логин либо пароль");
         }
-        else if (field.equalsIgnoreCase("password")) {
-            sendKeys(passwordFieldBy, keys);
-        }
-        else {
-            System.out.println("Введите правильное название поля: либо login либо password");
-        }
-
     }
 
-    private void clearField(By fieldBy){
-        WebElement field = getElement(fieldBy);
+    private void clearElement(WebElement field) {
+        waitForVisibilityOf(loginFieldBy, 30);
         field.click();
         field.clear();
     }
 
-    public void pressLoginButton(){
-        WebElement button = getElement(loginButtonBy);
-        button.click();
+    public void pressLoginButton() {
+        loginButton.click();
     }
 
-    public void hideKeyBoard(){
-        WebElement label = getElement(docAppLabelBy);
-        label.click();
+    public void hideKeyBoard() {
+        driver.hideKeyboard();
     }
 
-    private void sendKeys(By elementBy, String keys){
-        clearField(elementBy);
-        getElement(elementBy).sendKeys(keys);
+    private void clearElementByAndSendKeys(WebElement element, String keys) {
+        clearElement(element);
+        element.sendKeys(keys);
+    }
+
+    public boolean isLoginFieldVisible() {
+        waitForVisibilityOf(loginFieldBy, 20);
+        return loginField.isDisplayed();
     }
 
 }

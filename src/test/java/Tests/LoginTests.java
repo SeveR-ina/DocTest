@@ -1,21 +1,27 @@
 package Tests;
+
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import pages.ChatsPage;
+import pages.LoginPage;
 
 import java.io.IOException;
 
 public class LoginTests extends AndroidSetup {
-    private String TEXT_OF_CORRECT_LOGIN, TEXT_OF_CORRECT_PASS, WARNING_EMPTY_FIELDS;
+    private String CORRECT_LOGIN, CORRECT_PASS, WARNING_EMPTY_FIELDS;
+    private LoginPage loginPage;
 
     @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
-    public void prepareTest(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
+    public void setUpLoginPage(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
         this.setUp(platformName, platformVersion, appiumServerURL, deviceName, UDID);
-        TEXT_OF_CORRECT_LOGIN = testProperties.getProperty("correctLogin");
-        TEXT_OF_CORRECT_PASS = testProperties.getProperty("correctPass");
+        loginPage = new LoginPage(driver); //can be null?
+        Assert.assertTrue(loginPage.isLoginFieldVisible());
+        CORRECT_LOGIN = testProperties.getProperty("correctLogin");
+        CORRECT_PASS = testProperties.getProperty("correctPass");
         WARNING_EMPTY_FIELDS = testProperties.getProperty("snackBarEmptyFields");
     }
 
@@ -26,55 +32,53 @@ public class LoginTests extends AndroidSetup {
 
     @Test
     public void falseLoginTest() throws IOException {
-        String ILLEGAL_LOGIN = testProperties.getProperty("illegalLogin");
-        String ILLEGAL_PASS = testProperties.getProperty("illegalPass");
+        String INCORRECT_LOGIN = testProperties.getProperty("incorrectLogin");
+        String INCORRECT_PASS = testProperties.getProperty("incorrectPassword");
         String WARNING_INCORRECT_LOGIN = testProperties.getProperty("snackBarIncorrectLogin");
 
-
-        loginPage.login(ILLEGAL_LOGIN, ILLEGAL_PASS);
+        typeToFieldAndHideKeyboard("login", INCORRECT_LOGIN);
+        typeToFieldAndHideKeyboard("password", INCORRECT_PASS);
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_INCORRECT_LOGIN));
-        System.out.println("*** falseLoginTest DONE! ***");
     }
 
+    @Parameters({"appiumServerURL"})
     @Test
-    public void correctLoginTest() throws IOException {
-        loginPage.login(TEXT_OF_CORRECT_LOGIN, TEXT_OF_CORRECT_PASS);
-        Assert.assertTrue(loginPage.correctLoginWorks());
-        System.out.println("*** correctLoginTest DONE! ***");
+    public ChatsPage correctLoginTest() throws IOException {
+        //type correct data to login/pass
+        typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
+        typeToFieldAndHideKeyboard("password", CORRECT_PASS);
+        //PageFactory.initElements(this.getAndroidDriver(appiumServerURL), ChatsPage.class);
+        ChatsPage chatsPage = new ChatsPage(driver);
+        Assert.assertNotNull(chatsPage);
+        return chatsPage;
     }
 
     @Test
     public void emptyLoginFieldTest() throws IOException {
-        System.out.println("*** check login... ***");
-        typeToFieldSomeText("password", TEXT_OF_CORRECT_PASS);
+        //clear field, type text, hide keyboard:
+        typeToFieldAndHideKeyboard("password", CORRECT_PASS);
+        loginPage.pressLoginButton();
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
-        System.out.println("*** emptyLoginFieldTest DONE! ***");
     }
 
     @Test
     public void emptyPasswordFieldTest() throws IOException {
-        System.out.println("*** check password... ***");
-        typeToFieldSomeText("login", TEXT_OF_CORRECT_LOGIN);
+        //clear field, type text, hide keyboard:
+        typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
+        loginPage.pressLoginButton();
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
-        System.out.println("*** emptyPasswordFieldTest DONE! ***");
     }
 
     @Test
     public void emptyFieldsTest() throws IOException {
-
-        System.out.println("*** emptyFieldsTest is started! ***");
-        System.out.println("*** check all fields... ***");
-        // all fields are empty. click on the login button:
+        // all fields are empty. click on the isAuthSuccess button:
         loginPage.pressLoginButton();
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_EMPTY_FIELDS));
-
-        System.out.println("*** emptyFieldsTest DONE! ***");
     }
 
-    private void typeToFieldSomeText(String field, String keys){
-        loginPage.typeToFieldSomeText(field, keys);
+    private void typeToFieldAndHideKeyboard(String field, String text) {
+        loginPage.clearFieldAndTypeText(field, text);
         loginPage.hideKeyBoard();
-        loginPage.pressLoginButton();
     }
 
 }
