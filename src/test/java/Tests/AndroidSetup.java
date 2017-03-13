@@ -54,5 +54,6 @@ class AndroidSetup {
     private AndroidDriver getAndroidDriver(String appiumServerURL) throws MalformedURLException {
         //return new AndroidDriver(new URL("http://" + appiumServerURL), capabilities);
         return new AndroidDriver<MobileElement>(new URL("http://" + appiumServerURL), capabilities);
+        //return PageFactory.initElements(new AppiumDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities), LoginPage.class);
     }
 }

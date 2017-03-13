@@ -1,6 +1,5 @@
 package pages;
-
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.functions.ExpectedCondition;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.By;
@@ -10,12 +9,24 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-class BasePage {
-    static AppiumDriver driver;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-    BasePage(AppiumDriver driver) {
+class BasePage {
+    static AndroidDriver driver;
+
+    BasePage(AndroidDriver driver) {
         BasePage.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);//this = page Login page?
+        PageFactory.initElements(new AppiumFieldDecorator(driver, 20, TimeUnit.SECONDS), this);
+        //return PageFactory.initElements(driver, this);//this = page Login page?
+    }
+
+    WebElement getElement(By elementBy){
+        return driver.findElement(elementBy);
+    }
+
+    List<WebElement> getListOfElements(By elementBy){
+        return driver.findElements(elementBy);
     }
 
     void waitForVisibilityOf(By locator, long timeOutInSeconds) {

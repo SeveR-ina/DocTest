@@ -13,12 +13,14 @@ import java.io.IOException;
 public class LoginTests extends AndroidSetup {
     private String CORRECT_LOGIN, CORRECT_PASS, WARNING_EMPTY_FIELDS;
     private LoginPage loginPage;
+    ChatsPage chatsPage;
 
     @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
     public void setUpLoginPage(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
         this.setUp(platformName, platformVersion, appiumServerURL, deviceName, UDID);
-        loginPage = new LoginPage(driver); //can be null?
+        loginPage = new LoginPage(driver);
+        Assert.assertNotNull(loginPage);
         Assert.assertTrue(loginPage.isLoginFieldVisible());
         CORRECT_LOGIN = testProperties.getProperty("correctLogin");
         CORRECT_PASS = testProperties.getProperty("correctPass");
@@ -38,19 +40,19 @@ public class LoginTests extends AndroidSetup {
 
         typeToFieldAndHideKeyboard("login", INCORRECT_LOGIN);
         typeToFieldAndHideKeyboard("password", INCORRECT_PASS);
+        loginPage.pressLoginButton();
         Assert.assertTrue(loginPage.warningTextEquals(WARNING_INCORRECT_LOGIN));
     }
 
-    @Parameters({"appiumServerURL"})
     @Test
-    public ChatsPage correctLoginTest() throws IOException {
+    public void correctLoginTest() throws IOException {
         //type correct data to login/pass
         typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
         typeToFieldAndHideKeyboard("password", CORRECT_PASS);
+        loginPage.pressLoginButton();
         //PageFactory.initElements(this.getAndroidDriver(appiumServerURL), ChatsPage.class);
-        ChatsPage chatsPage = new ChatsPage(driver);
+        chatsPage = new ChatsPage(driver);
         Assert.assertNotNull(chatsPage);
-        return chatsPage;
     }
 
     @Test

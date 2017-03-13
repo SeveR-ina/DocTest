@@ -1,36 +1,34 @@
 package pages;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage {
 
-    //@WithTimeout(time = 20, unit = TimeUnit.SECONDS)
-    @FindBy(id = "EmailEntry")
     private WebElement loginField;
-
-    @AndroidFindBy(id = "PasswordEntry")
-    private WebElement passwordField;
-
-    @AndroidFindBy(id = "LoginButton")
     private WebElement loginButton;
-
-    @AndroidFindBy(id = "snackbar_text")
-    private WebElement snackBar;
-
+    private WebElement passwordField;
     private By loginFieldBy = By.id("EmailEntry");
     private By snackBarBy = By.id("snackbar_text");
+    private By loginButtonBy = By.id("LoginButton");
 
-    public LoginPage(AppiumDriver driver) {
+    public LoginPage(AndroidDriver driver) {
         super(driver);
+        waitForVisibilityOf(loginFieldBy, 20);
+        getAllElements();
+    }
+
+    private void getAllElements(){
+        loginField = getElement(loginFieldBy);
+        loginButton = getElement(loginButtonBy);
+        By passwordFieldBy = By.id("PasswordEntry");
+        passwordField = getElement(passwordFieldBy);
     }
 
     public boolean warningTextEquals(String snackBarText) {
-        waitForVisibilityOf(snackBarBy, 10);
-        return snackBar.getText().equalsIgnoreCase(snackBarText);
+        waitForVisibilityOf(snackBarBy, 20);
+        return getElement(snackBarBy).getText().equalsIgnoreCase(snackBarText);
     }
 
     public void clearFieldAndTypeText(String field, String keys) {
@@ -50,6 +48,8 @@ public class LoginPage extends BasePage {
     }
 
     public void pressLoginButton() {
+        waitForVisibilityOf(loginButtonBy, 10);
+        //loginButton.isDisplayed();
         loginButton.click();
     }
 
@@ -63,7 +63,6 @@ public class LoginPage extends BasePage {
     }
 
     public boolean isLoginFieldVisible() {
-        waitForVisibilityOf(loginFieldBy, 20);
         return loginField.isDisplayed();
     }
 
