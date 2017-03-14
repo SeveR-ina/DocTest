@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Suite" parallel="tests" thread-count="2" >
+<suite name="Suite" parallel="tests" thread-count="2">
     <test name="Test1">
         <parameter name="platformName" value="ANDROID"/>
         <parameter name="platformVersion" value="4.4.2"/>
@@ -8,7 +8,8 @@
         <parameter name="deviceName" value="Samsung Duos"/>
         <parameter name="UDID" value="192.168.1.124:5555"/>
         <classes>
-            <class name="Tests.LoginTests"/>
+            <class name="tests.DocTests.LoginTests"/>
+            <!-- <class name="tests.DocTests.ChatsTests"/>-->
         </classes>
     </test>
     <!--  <test name="Test2">
@@ -18,7 +19,7 @@
           <parameter name="deviceName" value="Redmi Note 4"/>
           <parameter name="UDID" value="192.168.1.119:5555"/>
           <classes>
-              <class name="Tests.LoginTests"/>
+              <class name="tests.DocTests.LoginTests"/>
           </classes>
       </test>-->
 </suite>

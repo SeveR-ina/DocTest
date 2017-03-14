@@ -1,10 +1,12 @@
-package pages;
+package pages.DocAppScreens;
 
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import pages.BaseMethods;
 
-public class LoginPage extends BasePage {
+public class LoginScreen extends BaseMethods {
 
     private WebElement loginField;
     private WebElement loginButton;
@@ -13,22 +15,27 @@ public class LoginPage extends BasePage {
     private By snackBarBy = By.id("snackbar_text");
     private By loginButtonBy = By.id("LoginButton");
 
-    public LoginPage(AndroidDriver driver) {
+    public LoginScreen(AndroidDriver driver) {
         super(driver);
         waitForVisibilityOf(loginFieldBy, 20);
-        getAllElements();
+        setAllElements();
     }
 
-    private void getAllElements(){
+    private void setAllElements() {
         loginField = getElement(loginFieldBy);
         loginButton = getElement(loginButtonBy);
         By passwordFieldBy = By.id("PasswordEntry");
         passwordField = getElement(passwordFieldBy);
     }
 
-    public boolean warningTextEquals(String snackBarText) {
+    public WebElement getWarning() {
         waitForVisibilityOf(snackBarBy, 20);
-        return getElement(snackBarBy).getText().equalsIgnoreCase(snackBarText);
+        return getElement(snackBarBy);
+    }
+
+    public boolean warningTextEquals(String snackBarText) {
+        String warningText = getWarning().getText();
+        return warningText.equalsIgnoreCase(snackBarText);
     }
 
     public void clearFieldAndTypeText(String field, String keys) {
@@ -48,13 +55,13 @@ public class LoginPage extends BasePage {
     }
 
     public void pressLoginButton() {
-        waitForVisibilityOf(loginButtonBy, 10);
-        //loginButton.isDisplayed();
+        waitForVisibilityOf(loginButtonBy, 20);
+        loginButton.isDisplayed();
         loginButton.click();
     }
 
     public void hideKeyBoard() {
-        driver.hideKeyboard();
+        driver.pressKeyCode(AndroidKeyCode.BACK);
     }
 
     private void clearElementByAndSendKeys(WebElement element, String keys) {

@@ -12,24 +12,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-class BasePage {
-    static AndroidDriver driver;
+public class BaseMethods {
+    protected static AndroidDriver driver;
 
-    BasePage(AndroidDriver driver) {
-        BasePage.driver = driver;
+    protected BaseMethods(AndroidDriver driver) {
+        BaseMethods.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver, 20, TimeUnit.SECONDS), this);
         //return PageFactory.initElements(driver, this);//this = page Login page?
     }
 
-    WebElement getElement(By elementBy){
+    protected WebElement getElement(By elementBy){
         return driver.findElement(elementBy);
     }
 
-    List<WebElement> getListOfElements(By elementBy){
+    protected List<WebElement> getListOfElements(By elementBy){
         return driver.findElements(elementBy);
     }
 
-    void waitForVisibilityOf(By locator, long timeOutInSeconds) {
+    protected void waitForVisibilityOf(By locator, long timeOutInSeconds) {
         Wait<WebDriver> wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.until(visibilityOfElementLocated(locator));
     }

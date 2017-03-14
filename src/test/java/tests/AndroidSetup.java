@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -11,10 +11,11 @@ import java.net.URL;
 import java.util.Properties;
 
 
-class AndroidSetup {
-    AndroidDriver driver;
-    Properties testProperties = new Properties();
-    private String ABSOLUTE_PATH_TO_DOC_APP, DOC_APP_PACKAGE, DOC_APP_ACTIVITY;
+ public class AndroidSetup {
+    protected AndroidDriver driver;
+    protected Properties testProperties = new Properties();
+    private String DOC_PATH, DOC_APP_PACKAGE, DOC_APP_ACTIVITY;
+    //private String PATIENT_APP_PATH, PATIENT_APP_PACKAGE, PATIENT_APP_ACTIVITY;
     private DesiredCapabilities capabilities;
 
     public void setUp(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
@@ -28,16 +29,19 @@ class AndroidSetup {
     }
 
     private void loadPropertiesFromFile() throws IOException {
-        String propertiesPath = "D:\\work\\IntellijIDEAProjects\\DocTest\\src\\test\\java\\resources\\test.properties";
+        String propertiesPath = "D:\\work\\IntellijIDEAProjects\\AppiumTests\\src\\test\\java\\resources\\test.properties";
         FileInputStream testPropertiesFile = new FileInputStream(propertiesPath);
         testProperties.load(testPropertiesFile);
     }
 
     private void initBaseProperties() throws IOException {
         loadPropertiesFromFile();
-        ABSOLUTE_PATH_TO_DOC_APP = testProperties.getProperty("absolutePathToDocApp");
+        DOC_PATH = testProperties.getProperty("pathToDocApp");
         DOC_APP_PACKAGE = testProperties.getProperty("docAppPackage");
         DOC_APP_ACTIVITY = testProperties.getProperty("docAppActivity");
+        /*PATIENT_APP_PATH = testProperties.getProperty("pathToPatientApp");
+        PATIENT_APP_PACKAGE = testProperties.getProperty("patientAppPackage");
+        PATIENT_APP_ACTIVITY = testProperties.getProperty("patientAppActivity");*/
     }
 
     private void setCapabilities(String platformName, String platformVersion, String deviceName, String UDID) throws IOException {
@@ -46,14 +50,16 @@ class AndroidSetup {
         capabilities.setCapability("platformVersion", platformVersion);
         capabilities.setCapability("deviceName", deviceName);
         capabilities.setCapability("udid", UDID);
-        capabilities.setCapability("app", ABSOLUTE_PATH_TO_DOC_APP);
+        setAppCapabilities();
+    }
+
+    private void setAppCapabilities(){
+        capabilities.setCapability("app", DOC_PATH);
         capabilities.setCapability("appPackage", DOC_APP_PACKAGE);
         capabilities.setCapability("appActivity", DOC_APP_ACTIVITY);
     }
 
     private AndroidDriver getAndroidDriver(String appiumServerURL) throws MalformedURLException {
-        //return new AndroidDriver(new URL("http://" + appiumServerURL), capabilities);
         return new AndroidDriver<MobileElement>(new URL("http://" + appiumServerURL), capabilities);
-        //return PageFactory.initElements(new AppiumDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities), LoginPage.class);
     }
 }
