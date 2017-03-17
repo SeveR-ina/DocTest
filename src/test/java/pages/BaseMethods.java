@@ -17,8 +17,7 @@ public class BaseMethods {
 
     protected BaseMethods(AndroidDriver driver) {
         BaseMethods.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver, 20, TimeUnit.SECONDS), this);
-        //return PageFactory.initElements(driver, this);//this = page Login page?
+        PageFactory.initElements(new AppiumFieldDecorator(driver, 30, TimeUnit.SECONDS), this);
     }
 
     protected WebElement getElement(By elementBy){

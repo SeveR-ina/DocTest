@@ -12,15 +12,12 @@ import java.io.IOException;
 
 public class MainPageTests extends AndroidSetup {
 
-    private MainScreen mainScreen;
-
     @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
     public void setUpLoginPage(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
         this.setUp(platformName, platformVersion, appiumServerURL, deviceName, UDID);
-        mainScreen = new MainScreen(driver);
+        MainScreen mainScreen = new MainScreen(driver);
         Assert.assertNotNull(mainScreen);
-        //Assert.assertTrue(mainScreen.isLoginFieldVisible());
     }
 
     @AfterMethod
@@ -30,6 +27,6 @@ public class MainPageTests extends AndroidSetup {
 
     @Test
     public void openAskDoctorsScreen() throws IOException {
-        //mainScreen.
+
     }
 }

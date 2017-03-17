@@ -9,31 +9,32 @@ import java.util.List;
 
 public class ChatsScreen extends BaseMethods {
     private List<WebElement> chatsList;
-    private WebElement toolbar;
 
-    private By toolbarBy = By.id("com.greitkonsalt.medgreat:id/activity_my_toolbar");
+    By toolbarBy = By.id("com.greitkonsalt.medgreat:id/activity_my_toolbar");
     private By chatsListBy = By.id("ConsultationsListView");
 
-    public ChatsScreen(AndroidDriver driver) {
+    ChatsScreen(AndroidDriver driver) {
         super(driver);
-        waitForVisibilityOf(toolbarBy, 20);
+        waitForVisibilityOf(toolbarBy, 30);
         setAllElements();
     }
 
     private void setAllElements() {
         chatsList = getListOfElements(chatsListBy);
-        toolbar = getElement(toolbarBy);
-    }
-
-    public boolean isChatsPageVisible() {
-        return toolbar.isDisplayed();
+        //WebElement toolbar = getElement(toolbarBy);
     }
 
     public WebElement getSomeChat(int indexOfChat) {
         return chatsList.get(indexOfChat);
-      /*  for(WebElement chat : chatsList) {
+        /*  for(WebElement chat : chatsList) {
             return
         }*/
+    }
+
+    public OneChatScreen getOneChatScreen() {
+        OneChatScreen oneChatScreen = new OneChatScreen(driver);
+        waitForVisibilityOf(oneChatScreen.slidingTabs, 20);
+        return oneChatScreen;
     }
 
     public void openSomeChat(int indexOfChat) {

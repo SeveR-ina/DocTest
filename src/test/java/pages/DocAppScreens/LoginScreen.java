@@ -8,12 +8,10 @@ import pages.BaseMethods;
 
 public class LoginScreen extends BaseMethods {
 
-    private WebElement loginField;
-    private WebElement loginButton;
-    private WebElement passwordField;
+    private WebElement loginField, passwordField, loginButton;
+    private By loginButtonBy = By.id("LoginButton");
     private By loginFieldBy = By.id("EmailEntry");
     private By snackBarBy = By.id("snackbar_text");
-    private By loginButtonBy = By.id("LoginButton");
 
     public LoginScreen(AndroidDriver driver) {
         super(driver);
@@ -28,7 +26,7 @@ public class LoginScreen extends BaseMethods {
         passwordField = getElement(passwordFieldBy);
     }
 
-    public WebElement getWarning() {
+    private WebElement getWarning() {
         waitForVisibilityOf(snackBarBy, 20);
         return getElement(snackBarBy);
     }
@@ -44,33 +42,42 @@ public class LoginScreen extends BaseMethods {
         } else if (field.equalsIgnoreCase("password")) {
             clearElementByAndSendKeys(passwordField, keys);
         } else {
-            System.out.println("Введите правильное название поля: либо логин либо пароль");
+            System.out.println("Введите правильное название поля: либо login либо password");
         }
     }
 
-    private void clearElement(WebElement field) {
+    private void clearInputElement(WebElement field) {
         waitForVisibilityOf(loginFieldBy, 30);
         field.click();
         field.clear();
     }
 
+    public void pressOkayOnKeyBoard() {
+        driver.pressKeyCode(AndroidKeyCode.ENTER);
+    }
+
     public void pressLoginButton() {
         waitForVisibilityOf(loginButtonBy, 20);
-        loginButton.isDisplayed();
         loginButton.click();
     }
 
+    public ChatsScreen getChatsScreen() {
+        ChatsScreen chatsScreen = new ChatsScreen(driver);
+        waitForVisibilityOf(chatsScreen.toolbarBy, 20);
+        return chatsScreen;
+    }
+
     public void hideKeyBoard() {
-        driver.pressKeyCode(AndroidKeyCode.BACK);
+        driver.hideKeyboard();
     }
 
     private void clearElementByAndSendKeys(WebElement element, String keys) {
-        clearElement(element);
+        clearInputElement(element);
         element.sendKeys(keys);
     }
 
-    public boolean isLoginFieldVisible() {
-        return loginField.isDisplayed();
+    public boolean areInputFieldsVisible() {
+        return loginField.isDisplayed() && passwordField.isDisplayed();
     }
 
 }

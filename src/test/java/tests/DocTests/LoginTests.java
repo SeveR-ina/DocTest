@@ -12,17 +12,15 @@ import pages.DocAppScreens.LoginScreen;
 import java.io.IOException;
 
 public class LoginTests extends AndroidSetup {
-    private String CORRECT_LOGIN, CORRECT_PASS, WARNING_EMPTY_FIELDS;
-    private LoginScreen loginScreen;
-    ChatsScreen chatsScreen;
+    private String WARNING_EMPTY_FIELDS;
+    String CORRECT_LOGIN, CORRECT_PASS;
+    LoginScreen loginScreen;
 
     @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
     public void setUpLoginPage(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
-        this.setUp(platformName, platformVersion, appiumServerURL, deviceName, UDID);
+        setUp(platformName, platformVersion, appiumServerURL, deviceName, UDID);
         loginScreen = new LoginScreen(driver);
-        Assert.assertNotNull(loginScreen);
-        Assert.assertTrue(loginScreen.isLoginFieldVisible());
         CORRECT_LOGIN = testProperties.getProperty("correctLogin");
         CORRECT_PASS = testProperties.getProperty("correctPass");
         WARNING_EMPTY_FIELDS = testProperties.getProperty("snackBarEmptyFields");
@@ -33,17 +31,24 @@ public class LoginTests extends AndroidSetup {
         this.tearDown();
     }
 
-    @Test
+    @Test//(enabled = false)
     public void correctLoginTest() throws IOException {
-        //type correct data to login/pass
+        Assert.assertTrue(loginScreen.areInputFieldsVisible());
         typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
-        typeToFieldAndHideKeyboard("password", CORRECT_PASS);
+        loginScreen.clearFieldAndTypeText("password", CORRECT_PASS);
+        loginScreen.pressOkayOnKeyBoard();
 
-        loginScreen.pressLoginButton();
-
-        chatsScreen = new ChatsScreen(driver);
+        ChatsScreen chatsScreen = loginScreen.getChatsScreen();
         Assert.assertNotNull(chatsScreen);
     }
+
+    @Test
+    public void emptyFieldsTest() throws IOException {
+        Assert.assertTrue(loginScreen.areInputFieldsVisible());
+        loginScreen.pressLoginButton();
+        Assert.assertTrue(loginScreen.warningTextEquals(WARNING_EMPTY_FIELDS));
+    }
+
 
     private void typeToFieldAndHideKeyboard(String field, String text) {
         loginScreen.clearFieldAndTypeText(field, text);
@@ -56,6 +61,7 @@ public class LoginTests extends AndroidSetup {
         String INCORRECT_PASS = testProperties.getProperty("incorrectPassword");
         String WARNING_INCORRECT_LOGIN = testProperties.getProperty("snackBarIncorrectLogin");
 
+        Assert.assertTrue(loginScreen.areInputFieldsVisible());
         typeToFieldAndHideKeyboard("login", INCORRECT_LOGIN);
         typeToFieldAndHideKeyboard("password", INCORRECT_PASS);
         loginScreen.pressLoginButton();
@@ -64,7 +70,7 @@ public class LoginTests extends AndroidSetup {
 
     @Test
     public void emptyLoginFieldTest() throws IOException {
-        //clear field, type text, hide keyboard:
+        Assert.assertTrue(loginScreen.areInputFieldsVisible());
         typeToFieldAndHideKeyboard("password", CORRECT_PASS);
         loginScreen.pressLoginButton();
         Assert.assertTrue(loginScreen.warningTextEquals(WARNING_EMPTY_FIELDS));
@@ -72,15 +78,8 @@ public class LoginTests extends AndroidSetup {
 
     @Test
     public void emptyPasswordFieldTest() throws IOException {
-        //clear field, type text, hide keyboard:
+        Assert.assertTrue(loginScreen.areInputFieldsVisible());
         typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
-        loginScreen.pressLoginButton();
-        Assert.assertTrue(loginScreen.warningTextEquals(WARNING_EMPTY_FIELDS));
-    }
-
-    @Test
-    public void emptyFieldsTest() throws IOException {
-        // all fields are empty. click on the isAuthSuccess button:
         loginScreen.pressLoginButton();
         Assert.assertTrue(loginScreen.warningTextEquals(WARNING_EMPTY_FIELDS));
     }

@@ -10,9 +10,7 @@ public class ChatsBetweenDocAndPatient extends AndroidSetup {
     @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
     public void setAppTests(String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
-        //this.setUpLoginPage(platformName, platformVersion, appiumServerURL, deviceName, UDID);
-        //this.correctLoginTest();
-        //Assert.assertTrue(chatListScreen.isChatsPageVisible());
+
     }
 
     @AfterMethod
