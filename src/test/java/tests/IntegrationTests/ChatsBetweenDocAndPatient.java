@@ -3,9 +3,9 @@ package tests.IntegrationTests;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
-import tests.AndroidSetup;
+import tests.MainSetup;
 
-public class ChatsBetweenDocAndPatient extends AndroidSetup {
+public class ChatsBetweenDocAndPatient extends MainSetup {
 
     @Parameters({"platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod

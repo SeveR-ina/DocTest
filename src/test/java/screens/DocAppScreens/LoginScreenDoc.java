@@ -1,25 +1,25 @@
-package pages.DocAppScreens;
+package screens.DocAppScreens;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import pages.BaseMethods;
+import screens.BaseMethods;
 
-public class LoginScreen extends BaseMethods {
+public class LoginScreenDoc extends BaseMethods {
 
     private WebElement loginField, passwordField, loginButton;
     private By loginButtonBy = By.id("LoginButton");
-    private By loginFieldBy = By.id("EmailEntry");
+    public By loginFieldBy = By.id("EmailEntry");
     private By snackBarBy = By.id("snackbar_text");
 
-    public LoginScreen(AndroidDriver driver) {
+    public LoginScreenDoc(AndroidDriver driver) {
         super(driver);
         waitForVisibilityOf(loginFieldBy, 20);
-        setAllElements();
+        setElements();
     }
 
-    private void setAllElements() {
+    private void setElements() {
         loginField = getElement(loginFieldBy);
         loginButton = getElement(loginButtonBy);
         By passwordFieldBy = By.id("PasswordEntry");
@@ -42,7 +42,7 @@ public class LoginScreen extends BaseMethods {
         } else if (field.equalsIgnoreCase("password")) {
             clearElementByAndSendKeys(passwordField, keys);
         } else {
-            System.out.println("Введите правильное название поля: либо login либо password");
+            System.out.println("Исправьте название поля на login либо password");
         }
     }
 
@@ -61,12 +61,6 @@ public class LoginScreen extends BaseMethods {
         loginButton.click();
     }
 
-    public ChatsScreen getChatsScreen() {
-        ChatsScreen chatsScreen = new ChatsScreen(driver);
-        waitForVisibilityOf(chatsScreen.toolbarBy, 20);
-        return chatsScreen;
-    }
-
     public void hideKeyBoard() {
         driver.hideKeyboard();
     }
@@ -77,6 +71,7 @@ public class LoginScreen extends BaseMethods {
     }
 
     public boolean areInputFieldsVisible() {
+        waitForVisibilityOf(loginFieldBy, 25);
         return loginField.isDisplayed() && passwordField.isDisplayed();
     }
 
