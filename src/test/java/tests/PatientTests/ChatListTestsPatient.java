@@ -5,12 +5,12 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import tests.MainSetup;
 
-public class ChatsTestsPatient extends MainSetup {
-    //private ChatsScreenPatient chatsScreenPatient;
+public class ChatListTestsPatient extends BasePatientMethods {
+    //private ChatListScreenPatient chatsScreenPatient;
 
-    @Parameters({"appName", "platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
+    @Parameters({"port", "appName", "platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
     @BeforeMethod
-    public void setUpChatsPage(String appName, String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
+    public void setUpChatsScreen(int port, String appName, String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
 
     }
 
@@ -27,7 +27,7 @@ public class ChatsTestsPatient extends MainSetup {
     @Test(priority = 2) //(dependsOnMethods = {"isAnyChatHere"})
     public void openAnyChat() {
         //chatsScreenPatient.openSomeChat(0);
-        //PatientChatScreen openedChatScreen = chatsScreenPatient.getOneChatScreen();
+        //ChatScreenTestsPatient openedChatScreen = chatsScreenPatient.getOneChatScreen();
         //Assert.assertNotNull(openedChatScreen);
     }
 }

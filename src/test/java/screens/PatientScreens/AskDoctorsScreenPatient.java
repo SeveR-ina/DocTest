@@ -7,13 +7,13 @@ import screens.BaseMethods;
 
 import java.util.List;
 
-public class ChatsScreenPatient extends BaseMethods {
+public class AskDoctorsScreenPatient extends BaseMethods {
     private List<WebElement> chatsList;
 
     public By toolbarBy = By.id("com.greitkonsalt.medgreat:id/activity_my_toolbar");
     //private By chatsListBy = By.id("ConsultationsListView");
 
-    public ChatsScreenPatient(AndroidDriver driver) {
+    public AskDoctorsScreenPatient(AndroidDriver driver) {
         super(driver);
         waitForVisibilityOf(toolbarBy, 30);
         //setElements();

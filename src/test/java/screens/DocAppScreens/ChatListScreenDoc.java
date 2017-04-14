@@ -7,30 +7,30 @@ import screens.BaseMethods;
 
 import java.util.List;
 
-public class ChatsScreenDoc extends BaseMethods {
+public class ChatListScreenDoc extends BaseMethods {
     private List<WebElement> chatsList;
 
     private By toolbarBy = By.id("com.greitkonsalt.medgreat:id/activity_my_toolbar");
     private By chatsListBy = By.id("ConsultationsListView");
 
-    private By updateFrameBy = By.id("com.greitkonsalt.medgreat:id/action_bar_root"); //com.greitkonsalt.medgreat:id/alertTitle
+    private By updateFrameBy = By.id("com.greitkonsalt.medgreat:id/alertTitle"); //com.greitkonsalt.medgreat:id/action_bar_root
     private By noUpdateButtonBy = By.id("android:id/button2"); //cancel update
 
-    public ChatsScreenDoc(AndroidDriver driver) {
+    public ChatListScreenDoc(AndroidDriver driver) {
         super(driver);
         closeAlertIfVisible();
-        setElements();
+        setChatListDocElements();
     }
 
     private void closeAlertIfVisible() {
-        waitForVisibilityOf(updateFrameBy, 15);
         if (isElementVisible(updateFrameBy)) {
-            driver.findElement(noUpdateButtonBy).click();
+            WebElement noUpdateButton = driver.findElement(noUpdateButtonBy);
+            noUpdateButton.click();
         }
-        waitForVisibilityOf(toolbarBy, 8);
+        waitForVisibilityOf(toolbarBy, 15);
     }
 
-    private void setElements() {
+    private void setChatListDocElements() {
         chatsList = getListOfElements(chatsListBy);
     }
 
@@ -38,10 +38,10 @@ public class ChatsScreenDoc extends BaseMethods {
         return chatsList.get(indexOfChat);
     }
 
-    public DocChatScreen getOneChatScreen() {
-        DocChatScreen docChatScreen = new DocChatScreen(driver);
-        waitForVisibilityOf(docChatScreen.slidingTabs, 20);
-        return docChatScreen;
+    public ChatScreenDoc getOneChatScreen() {
+        ChatScreenDoc chatScreenDoc = new ChatScreenDoc(driver);
+        waitForVisibilityOf(chatScreenDoc.slidingTabs, 20);
+        return chatScreenDoc;
     }
 
     public void openSomeChat(int indexOfChat) {

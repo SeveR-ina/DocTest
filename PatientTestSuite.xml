@@ -2,6 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Patient tests" parallel="tests" thread-count="2">
     <test name="Samsung Tests">
+        <parameter name="port" value="4723"/>
         <parameter name="appName" value="MedGreat"/>
         <parameter name="platformName" value="ANDROID"/>
         <parameter name="platformVersion" value="4.4.2"/>
@@ -9,11 +10,12 @@
         <parameter name="deviceName" value="Samsung Duos"/>
         <parameter name="UDID" value="192.168.1.124:5555"/>
         <classes>
-            <class name="tests.DocTests.LoginTestsDoc"/>
-            <class name="tests.DocTests.ChatsTestsDoc"/>
+            <class name="tests.PatientTests.MainScreenTestsPatient"/>
+            <!--<class name="tests.PatientTests.LoginTestsPatient"/>-->
         </classes>
     </test>
     <!--    <test name="Xiaomi Tests">
+            <parameter name="port" value="4725"/>
             <parameter name="platformName" value="ANDROID"/>
             <parameter name="platformVersion" value="6.0"/>
             <parameter name="appiumServerURL" value="127.0.0.1:4725/wd/hub"/>
@@ -21,7 +23,7 @@
             <parameter name="UDID" value="192.168.1.103:5555"/>
             <classes>
                 <class name="tests.DocTests.LoginTestsDoc"/>
-                <class name="tests.DocTests.ChatsTestsDoc"/>
+                <class natests.DocTests.ChatListTestsDocsDoc"/>
             </classes>
         </test>-->
 </suite>

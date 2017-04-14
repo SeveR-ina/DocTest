@@ -1,23 +1,24 @@
 package tests.DocTests;
 
-import tests.MainSetup;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
-import screens.DocAppScreens.LoginScreenDoc;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 
-public class LoginTestsDoc extends MainSetup {
+public class LoginTestsDoc extends BaseDocMethods {
     private String WARNING_EMPTY_FIELDS;
-    private LoginScreenDoc loginScreenDoc;
 
-    @Parameters({"appName", "platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
+    @Parameters({"port", "appName", "platformName", "platformVersion", "deviceName", "UDID"})
+    @BeforeClass
+    public void setUpCapabilities(int port, String appName, String platformName, String platformVersion, String deviceName, String UDID) throws Exception {
+        setCapabilities(appName, platformName, platformVersion, deviceName, UDID);
+        prepareAppiumServer(port);
+    }
+
     @BeforeMethod
-    public void setUpLoginPage(String appName, String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
-        loginScreenDoc = openLoginPage(appName, platformName, platformVersion, appiumServerURL, deviceName, UDID);
+    public void setUpLoginScreen() throws Exception {
+        driver = getAndroidDriver(); //?
+        loginScreenDoc = openDocLoginScreen();
         Assert.assertNotNull(loginScreenDoc);
         WARNING_EMPTY_FIELDS = testProperties.getProperty("snackBarEmptyFields");
     }
@@ -29,7 +30,7 @@ public class LoginTestsDoc extends MainSetup {
 
     @Test//(enabled = false)
     public void correctLoginTest() throws IOException {
-        Assert.assertNotNull(correctLogin());
+        Assert.assertNotNull(correctLoginInDocApp());
     }
 
     @Test
@@ -68,6 +69,7 @@ public class LoginTestsDoc extends MainSetup {
         loginScreenDoc.pressLoginButton();
         Assert.assertTrue(loginScreenDoc.warningTextEquals(WARNING_EMPTY_FIELDS));
     }
+
 
 }
 

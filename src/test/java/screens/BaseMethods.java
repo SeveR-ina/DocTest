@@ -10,8 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import screens.DocAppScreens.ChatsScreenDoc;
-import screens.PatientScreens.ChatsScreenPatient;
+import screens.PatientScreens.ChatListScreenPatient;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -115,14 +114,10 @@ public class BaseMethods {
         loginButton.click();
     }
 
-    public ChatsScreenPatient getPatientChatsScreen() {
-        ChatsScreenPatient chatsScreenPatient = new ChatsScreenPatient(driver);
-        waitForVisibilityOf(chatsScreenPatient.toolbarBy, 20);
-        return chatsScreenPatient;
-    }
-
-    public ChatsScreenDoc getDocChatsScreen() {
-        return new ChatsScreenDoc(driver);
+    public ChatListScreenPatient getPatientChatsScreen() {
+        ChatListScreenPatient chatListScreenPatient = new ChatListScreenPatient(driver);
+        waitForVisibilityOf(chatListScreenPatient.toolbarBy, 20);
+        return chatListScreenPatient;
     }
 
     private void clearElementByAndSendKeys(WebElement element, String keys) {

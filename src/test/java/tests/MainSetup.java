@@ -3,9 +3,6 @@ package tests;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.Assert;
-import screens.DocAppScreens.ChatsScreenDoc;
-import screens.DocAppScreens.LoginScreenDoc;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,15 +12,14 @@ import java.util.Properties;
 
 
 public class MainSetup {
-    private AndroidDriver driver;
+    protected AndroidDriver driver;
     protected Properties testProperties = new Properties();
     private String DOC_PATH, DOC_APP_PACKAGE, DOC_APP_ACTIVITY;
     private String PATIENT_APP_PATH, PATIENT_APP_PACKAGE, PATIENT_APP_ACTIVITY;
     private DesiredCapabilities capabilities;
     protected String CORRECT_LOGIN, CORRECT_PASS;
-    private LoginScreenDoc loginScreenDoc;
 
-    private void setDeviceAndOS(String platformName, String platformVersion, String deviceName, String UDID) throws Exception {
+    protected void setDeviceAndOS(String platformName, String platformVersion, String deviceName, String UDID) throws Exception {
         capabilities = new DesiredCapabilities();
         setOSCapabilies(platformName, platformVersion);
         setDeviceCapabilities(deviceName, UDID);
@@ -31,33 +27,6 @@ public class MainSetup {
 
     public void tearDown() throws Exception {
         driver.quit();
-    }
-
-    protected LoginScreenDoc openLoginPage(String appName, String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
-        initAppsProperties(appName);
-        setDeviceAndOS(platformName, platformVersion, deviceName, UDID);
-        setAppCapabilities(appName);
-        driver = getAndroidDriver(appiumServerURL);
-        loginScreenDoc = new LoginScreenDoc(driver);
-        CORRECT_LOGIN = testProperties.getProperty("correctLogin");
-        CORRECT_PASS = testProperties.getProperty("correctPass");
-
-        return loginScreenDoc;
-    }
-
-    protected ChatsScreenDoc correctLogin() {
-        Assert.assertTrue(loginScreenDoc.areInputFieldsVisible());
-        typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
-        loginScreenDoc.clearFieldAndTypeText("password", CORRECT_PASS);
-        loginScreenDoc.pressOkayOnKeyBoard();
-
-        Assert.assertTrue(loginScreenDoc.isElementInvisible(loginScreenDoc.loginFieldBy));// not sure
-        return loginScreenDoc.getDocChatsScreen();
-    }
-
-    protected void typeToFieldAndHideKeyboard(String field, String text) {
-        loginScreenDoc.clearFieldAndTypeText(field, text);
-        loginScreenDoc.hideKeyBoard();
     }
 
     private void loadPropertiesFromFile() throws IOException {
@@ -68,7 +37,7 @@ public class MainSetup {
 
     private void initAppsProperties(String appName) throws IOException {
         loadPropertiesFromFile();
-        if (appName.equalsIgnoreCase("MedGreat Doctors")) {
+        if (appName.equalsIgnoreCase("MedGreat Doc")) {
             initDocAppProperties();
         } else if (appName.equalsIgnoreCase("MedGreat")) {
             initPatientAppProperties();
@@ -76,7 +45,7 @@ public class MainSetup {
             initDocAppProperties();
             initPatientAppProperties();
         } else {
-            System.out.println("Входный параметр appName = MedGreat Doctors || Medgreat, если используются оба, исправьте на both");
+            System.out.println("Входный параметр appName = MedGreat Doc || Medgreat, если используются оба, исправьте на both");
         }
     }
 
@@ -91,7 +60,7 @@ public class MainSetup {
     }
 
     private void setAppCapabilities(String appName) {
-        if (appName.equalsIgnoreCase("MedGreat Doctors")) {
+        if (appName.equalsIgnoreCase("MedGreat Doc")) {
             capabilities.setCapability("app", DOC_PATH);
             capabilities.setCapability("appPackage", DOC_APP_PACKAGE);
             capabilities.setCapability("appActivity", DOC_APP_ACTIVITY);
@@ -105,8 +74,9 @@ public class MainSetup {
         }
     }
 
-    private AndroidDriver getAndroidDriver(String appiumServerURL) throws MalformedURLException {
-        return new AndroidDriver<MobileElement>(new URL("http://" + appiumServerURL), capabilities);
+    protected AndroidDriver getAndroidDriver() throws MalformedURLException {
+        return new AndroidDriver<MobileElement>(new URL(AppiumServerStartStop.service_url), capabilities);
+        //return new AndroidDriver<MobileElement>(new URL("http://" + appiumServerURL), capabilities);
     }
 
     private void initDocAppProperties() {
@@ -119,5 +89,20 @@ public class MainSetup {
         PATIENT_APP_PATH = testProperties.getProperty("pathToPatientApp");
         PATIENT_APP_PACKAGE = testProperties.getProperty("patientAppPackage");
         PATIENT_APP_ACTIVITY = testProperties.getProperty("patientAppActivity");
+    }
+
+    protected void prepareAppiumServer(int port) throws Exception {
+        if (AppiumServerStartStop.service == null) {
+            AppiumServerStartStop.appiumStart(port);
+        } else {
+            AppiumServerStartStop.appiumStop(port);
+            AppiumServerStartStop.appiumStart(port);
+        }
+    }
+
+    protected void setCapabilities(String appName, String platformName, String platformVersion, String deviceName, String UDID) throws Exception {
+        setDeviceAndOS(platformName, platformVersion, deviceName, UDID);
+        initAppsProperties(appName);
+        setAppCapabilities(appName);
     }
 }

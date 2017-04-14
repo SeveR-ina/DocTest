@@ -1,25 +1,32 @@
 package tests.PatientTests;
 
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
-import screens.PatientScreens.ChatsScreenPatient;
+import org.testng.annotations.*;
+import screens.PatientScreens.ChatListScreenPatient;
 import screens.PatientScreens.LoginScreenPatient;
-import tests.MainSetup;
 
 import java.io.IOException;
 
-public class LoginTestsPatient extends MainSetup {
+public class LoginTestsPatient extends BasePatientMethods {
     private String WARNING_EMPTY_FIELDS;
     private String CORRECT_LOGIN, CORRECT_PASS;
     private LoginScreenPatient loginScreenPatient;
 
-    @Parameters({"appName", "platformName", "platformVersion", "appiumServerURL", "deviceName", "UDID"})
-    @BeforeMethod
-    public void setUpLoginPage(String appName, String platformName, String platformVersion, String appiumServerURL, String deviceName, String UDID) throws Exception {
+    @Parameters({"port", "appName", "platformName", "platformVersion", "deviceName", "UDID"})
+    @BeforeClass
+    public void setUpCapabilities(int port, String appName, String platformName, String platformVersion, String deviceName, String UDID) throws Exception {
+        setCapabilities(appName, platformName, platformVersion, deviceName, UDID);
+        prepareAppiumServer(port);
+    }
 
+   @BeforeMethod
+    public void setUpLoginScreen() throws Exception {
+        //setCapabilities(appName, platformName, platformVersion, deviceName, UDID);
+        //prepareAppiumServer(port);
+        driver = getAndroidDriver(); //?
+        loginScreenPatient = openPatientLoginScreen();
+        Assert.assertNotNull(loginScreenPatient);
+        WARNING_EMPTY_FIELDS = testProperties.getProperty("snackBarEmptyFields");
     }
 
     @AfterMethod
@@ -28,14 +35,14 @@ public class LoginTestsPatient extends MainSetup {
     }
 
     @Test//(enabled = false)
-    public void correctLoginTest() throws IOException {
+    public void correctLoginPatientTest() throws IOException {
         Assert.assertTrue(loginScreenPatient.areInputFieldsVisible());
         typeToFieldAndHideKeyboard("login", CORRECT_LOGIN);
         loginScreenPatient.clearFieldAndTypeText("password", CORRECT_PASS);
         loginScreenPatient.pressOkayOnKeyBoard();
 
-        ChatsScreenPatient chatsScreenPatient = loginScreenPatient.getPatientChatsScreen();
-        Assert.assertNotNull(chatsScreenPatient);
+        ChatListScreenPatient chatListScreenPatient = loginScreenPatient.getPatientChatsScreen();
+        Assert.assertNotNull(chatListScreenPatient);
     }
 
     @Test
@@ -74,4 +81,5 @@ public class LoginTestsPatient extends MainSetup {
         loginScreenPatient.pressLoginButton();
         Assert.assertTrue(loginScreenPatient.warningTextEquals(WARNING_EMPTY_FIELDS));
     }
+
 }
